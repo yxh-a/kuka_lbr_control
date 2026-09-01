@@ -86,6 +86,22 @@ Useful arguments for both: `model` (`iiwa7`, `iiwa14`, `med7`, `med14`),
 `world`. `sys_cfg` defaults to the torque system config for the impedance and
 gravity-compensation controllers, and to the position config otherwise.
 
+## Build your own controller
+
+`kuka_control_tutorial` is written to be read and copied from. Its
+**[Build your own controller](kuka_control_tutorial/README.md#build-your-own-controller)**
+section indexes the jobs you hit when writing a Cartesian node — commanding an
+end-effector pose, composing an action, generating a trajectory, making a
+controller parameter live-tunable, driving a controller from Python, wiring the
+build — against the exact file and line range in this workspace that already
+solves each one.
+
+Three background guides go with it:
+
+- [Commanding an end-effector pose](kuka_control_tutorial/doc/commanding-ee-pose.md)
+- [Composing an action and a trajectory](kuka_control_tutorial/doc/actions-and-trajectories.md)
+- [Dynamically configurable stiffness](kuka_control_tutorial/doc/dynamic-stiffness.md)
+
 ## Relationship to upstream
 
 This is a fork. It carries fixes that are not yet upstream, across three repos:
@@ -125,6 +141,13 @@ git rebase upstream/main   # upstream/humble for the LBR stack
   command and warns (throttled).
 - **Null-space stiffness was a single scalar** for all joints; it is now a
   per-joint list, validated against the joint count.
+- **Cartesian stiffness could only be set at configure time.** The six
+  `stiffness.*` parameters were read once in `on_configure`, so changing the
+  end-effector stiffness meant reloading the controller. They are now accepted
+  while the controller runs, through a validating `on_set_parameters` callback
+  and a slew-rate-limited ramp in the update loop, so a live edit cannot step
+  the commanded torque. See `kuka_control_tutorial/README.md` for the details
+  and the new `max_stiffness_*` / `stiffness_slew_rate_*` parameters.
 
 ## Known issues
 

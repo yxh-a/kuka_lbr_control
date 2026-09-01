@@ -1,0 +1,40 @@
+# Move the end effector along a straight line in Cartesian space to a target
+# position, by streaming interpolated setpoints to the Cartesian impedance
+# controller's target_frame topic.
+
+# ---------------------------------- Goal ----------------------------------
+# Target position, expressed in the controller's robot_base_link (lbr_link_0).
+geometry_msgs/Point target_position
+
+# Cruise speed along the line [m/s]. <= 0 falls back to the default_speed
+# parameter; values above max_speed are rejected.
+float64 speed
+
+# When true the orientation the end effector has at goal acceptance is held for
+# the whole motion and target_orientation is ignored.
+bool hold_orientation
+
+# Target orientation, in the same frame as target_position. Only used when
+# hold_orientation is false. Interpolated with slerp along the same time
+# profile as the position.
+geometry_msgs/Quaternion target_orientation
+---
+# --------------------------------- Result ---------------------------------
+# Measured end effector pose when the action finished.
+geometry_msgs/Pose final_pose
+
+# Distance [m] between final_pose and target_position.
+float64 position_error
+
+bool success
+string message
+---
+# -------------------------------- Feedback --------------------------------
+# Measured end effector pose.
+geometry_msgs/Pose current_pose
+
+# Remaining distance [m] from the measured pose to the target.
+float64 distance_remaining
+
+# Progress along the planned path, 0.0 .. 100.0.
+float64 percent_complete

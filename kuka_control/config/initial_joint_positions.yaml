@@ -1,8 +1,8 @@
 # initial joint positions [degrees] for gazebo simulation
-A1 : -0.8727   # -50 deg
-A2 : -0.6109   # -35 deg
-A3 : 0.0       # 0 deg
-A4 : 1.3090    # 75 deg
-A5 : 0.0       # 0 deg
-A6 : -1.1345   # -65 deg
-A7 : -0.8727   # -50 deg
+A1 : -50   # -50 deg
+A2 : -35   # -35 deg
+A3 : 0       # 0 deg
+A4 : 75    # 75 deg
+A5 : 0     # 0 deg
+A6 : -65   # -65 deg
+A7 : -50   # -50 deg

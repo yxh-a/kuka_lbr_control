@@ -2,7 +2,7 @@
 # managers regardless of their namespace. Usefull in multi-robot setups.
 /**/controller_manager:
   ros__parameters:
-    update_rate: 200
+    update_rate: 1000
 
     # ROS 2 control broadcasters
     joint_state_broadcaster:
@@ -128,12 +128,12 @@
       - lbr_A7
     delta_tau_max: 1.0 # Nm
     stiffness:  # w.r.t. stiffness_ref_link coordinates -> can be changed at runtime
-        trans_x: 0.05
-        trans_y: 0.05
-        trans_z: 0.05
-        rot_x: 0.0001
-        rot_y: 0.0001
-        rot_z: 0.0001
+        trans_x: 200.0
+        trans_y: 200.0
+        trans_z: 200.0
+        rot_x: 50.0
+        rot_y: 50.0
+        rot_z: 50.0
     nullspace_stiffness:
       - 0.0 # lbr_A1
       - 10.0 # lbr_A2

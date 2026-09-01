@@ -1,0 +1,39 @@
+# Follow a time-parameterised Cartesian path, streaming interpolated setpoints
+# to the impedance controller's target_frame topic.
+#
+# Unlike MoveToPose this carries its own timing: the caller decides how fast
+# each stretch is traversed. It is meant for replaying a recorded or drawn
+# path, where the shape and the timing both come from outside.
+#
+# The end effector must already be at (or very near) waypoints[0] -- send a
+# MoveToPose goal there first. The server rejects the path otherwise rather
+# than lurching to the start.
+
+# ---------------------------------- Goal ----------------------------------
+# Path waypoints in the controller's robot_base_link (lbr_link_0).
+geometry_msgs/Point[] waypoints
+
+# Time to reach each waypoint, seconds from the start of the motion. Same
+# length as waypoints, starting at 0.0 and strictly increasing. The server
+# interpolates linearly between consecutive waypoints.
+float64[] time_from_start
+
+# When true the orientation at goal acceptance is held for the whole path.
+bool hold_orientation
+
+# Orientation to hold, used only when hold_orientation is false.
+geometry_msgs/Quaternion orientation
+---
+# --------------------------------- Result ---------------------------------
+geometry_msgs/Pose final_pose
+
+# Distance [m] between final_pose and the last waypoint.
+float64 position_error
+
+bool success
+string message
+---
+# -------------------------------- Feedback --------------------------------
+geometry_msgs/Pose current_pose
+float64 percent_complete
+float64 time_remaining
