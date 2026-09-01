@@ -2,7 +2,7 @@
 # managers regardless of their namespace. Usefull in multi-robot setups.
 /**/controller_manager:
   ros__parameters:
-    update_rate: 1000
+    update_rate: 200
 
     # ROS 2 control broadcasters
     joint_state_broadcaster:
@@ -103,14 +103,15 @@
     # the controllers won't initialize and will emit an error message.
     ft_sensor_ref_link: "lbr_link_ee"
 
-    # This is the link that the robot feels compliant about. It does not need
-    # to coincide with the end_effector_link, but for many use cases, this
-    # configuration is handy. When working with a screwdriver, for instance, 
-    # setting compliance_ref_link == end_effector_link makes it easy to specify
-    # downward pushing forces without generating unwanted offset moments.
-    # On the other hand, an application could benefit from yielding a little in
-    # the robot's wrist while drawing a line on a surface with a pen.
+    # This is the link that the robot feels compliant about. It must be after
+    # at least one actuated joint; use stiffness_ref_link below to choose the
+    # coordinate frame for the stiffness axes.
     compliance_ref_link: "lbr_link_ee"
+
+    # This is the frame in which the diagonal stiffness values below are
+    # expressed. lbr_link_0 is fixed to the world in Gazebo, so this makes the
+    # end-effector stiffness axes align with the world/base frame.
+    stiffness_ref_link: "lbr_link_0"
 
     command_interfaces:
       - effort
@@ -126,14 +127,29 @@
       - lbr_A6
       - lbr_A7
     delta_tau_max: 1.0 # Nm
-    stiffness:  # w.r.t. compliance_ref_link coordinates -> can be changed at runtime
-        trans_x: 1000.0
-        trans_y: 1000.0
-        trans_z: 1000.0
-        rot_x: 30.0
-        rot_y: 30.0
-        rot_z: 30.0
-    nullspace_stiffness: 0.0 # 10.0
+    stiffness:  # w.r.t. stiffness_ref_link coordinates -> can be changed at runtime
+        trans_x: 0.05
+        trans_y: 0.05
+        trans_z: 0.05
+        rot_x: 0.0001
+        rot_y: 0.0001
+        rot_z: 0.0001
+    nullspace_stiffness:
+      - 0.0 # lbr_A1
+      - 10.0 # lbr_A2
+      - 0.0 # lbr_A3
+      - 10.0 # lbr_A4
+      - 0.0 # lbr_A5
+      - 0.0 # lbr_A6
+      - 0.0 # lbr_A7
+    nullspace_desired_configuration:
+      - -0.8727   # -50 deg
+      - -0.6109   # -35 deg
+      - 0.0       # 0 deg
+      - 1.3090    # 75 deg
+      - 0.0       # 0 deg
+      - -1.1345   # -65 deg
+      - -0.8727   # -50 deg
     compensate_gravity: false
     compensate_coriolis: false
 
@@ -220,10 +236,10 @@
       - lbr_A6
       - lbr_A7
     nullspace_desired_configuration:
-      - 0.0
-      - 0.70
-      - 0.0
-      - -1.25
-      - 0.0
-      - 1.40
-      - 0.0
+      - 0.0    # lbr_A1: 0.0 deg
+      - 0.70   # lbr_A2: 40.1 deg
+      - 0.0    # lbr_A3: 0.0 deg
+      - -1.25  # lbr_A4: -71.6 deg
+      - 0.0    # lbr_A5: 0.0 deg
+      - 1.40   # lbr_A6: 80.2 deg
+      - 0.0    # lbr_A7: 0.0 deg

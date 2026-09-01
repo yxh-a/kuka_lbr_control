@@ -103,8 +103,6 @@ class LBRROS2ControlMixin:
             namespace=robot_name,
             remappings=[
                 ("~/robot_description", "robot_description"),
-                ("cartesian_impedance_controller/target_frame", "target_frame"),
-                ("cartesian_impedance_controller/target_wrench", "target_wrench"),
                 ("joint_impedance_controller/target_frame", "target_frame"),
                 ("joint_impedance_controller/target_wrench", "target_wrench"),
                 ("kuka_clik_controller/target_frame", "target_frame"),
